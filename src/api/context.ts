@@ -1,15 +1,6 @@
 import axios from "axios";
 import { TEST_PROJECT_ID } from "../constants";
 
-export const fetchContextsForProject = async (projectId: string) => {
-  const response = await axios.post("http://localhost:8000/context/get", {
-    where: {
-      project_id: projectId,
-    },
-  });
-  return response.data;
-};
-
 export const createContextForProject = async (
   projectId: string,
   name: string,
@@ -24,12 +15,20 @@ export const createContextForProject = async (
   return response.data;
 };
 
-export const fetchContext = async (contextId: string) => {
-  const response = await axios.post("http://localhost:8000/context/get", {
-    where: {
-      context_id: contextId,
-    },
-  });
+export const fetchContextsForProject = async (projectId: string) => {
+  const response = await axios.get(
+    `http://localhost:8000/context/get/${projectId}`,
+  );
+  return response.data;
+};
+
+export const fetchContextByReadableId = async (
+  projectId: string,
+  id: string,
+) => {
+  const response = await axios.get(
+    `http://localhost:8000/context/get/${projectId}/${id}`,
+  );
   return response.data;
 };
 

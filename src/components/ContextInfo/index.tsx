@@ -58,7 +58,7 @@ const ContextInfo = ({ contextId }: { contextId: string }) => {
         {contextData && (
           <Tabs defaultValue="overview" className="w-screen h-screen">
             <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="files">Files</TabsTrigger>
               <TabsTrigger value="documents">Documents</TabsTrigger>
               <TabsTrigger value="search">Search</TabsTrigger>
@@ -69,7 +69,7 @@ const ContextInfo = ({ contextId }: { contextId: string }) => {
               <Card>
                 <CardHeader>
                   <CardTitle>Context: {contextData.name}</CardTitle>
-                  <Separator/>
+                  <Separator />
                 </CardHeader>
                 <CardContent className="space-y-2">
                   Description: {contextData.description}

@@ -1,32 +1,37 @@
 import { useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { TEST_PROJECT_ID } from "../../constants";
 import {
   createContextForProject,
   fetchContextsForProject,
 } from "../../api/context";
 
 import CreateContext from "@/components/CreateContext";
-import { Card, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import { Input } from "@/components/ui/input";
 
-interface Context {
-  id: string;
-  project_id: string;
-  name: string;
-  description: string;
-  created_at: string;
-  owner_id: string;
-  extra_metadata: object;
-}
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import DashboardHeader from "@/components/DashboardHeader";
+import DashboardBody from "@/components/DashboardBody";
+import { useProject } from "@/context/ProjectContext";
+import { IContext } from "@/types/context";
 
 const ContextScreen = () => {
   const navigate = useNavigate();
-  const [contextsData, setContextsData] = useState<Context[] | null>(null);
+  const [contextsData, setContextsData] = useState<IContext[] | null>(null);
 
-  useQuery("contexts", () => fetchContextsForProject(TEST_PROJECT_ID), {
+  const { project } = useProject();
+
+  useQuery("contexts", () => fetchContextsForProject(project?.id), {
     onSuccess: (data) => {
       setContextsData(data);
     },
@@ -36,8 +41,7 @@ const ContextScreen = () => {
 
   useMutation(
     "createContext",
-    () =>
-      createContextForProject(TEST_PROJECT_ID, "New Context", "Description"),
+    () => createContextForProject(project?.id, "New Context", "Description"),
     {
       onSuccess: () => {
         setContextsData(null);
@@ -47,29 +51,81 @@ const ContextScreen = () => {
 
   return (
     <>
-      <Sheet>
-        <div className="fixed">
-          <div>
-            <h1>Contexts</h1>
-            {contextsData &&
-              contextsData.map((context) => {
-                return (
-                  <Card
-                    key={context.id}
-                    className="w-auto p-4 m-4 hover:cursor-pointer"
-                    onClick={() => navigate(`/contexts/${context.id}`)}
-                  >
-                    <CardTitle>{context.name}</CardTitle>
-                  </Card>
-                );
-              })}
-            <SheetTrigger>
-              <Button className="m-4">Create Context</Button>
-            </SheetTrigger>
+      <DashboardBody>
+        <DashboardHeader>
+          <span className="iheading-m text-neutral-800">Knowledge Base</span>
+          <span className="iheading-xxs text-neutral-400 ml-4 mt-1">
+            All your documents and data.
+          </span>
+        </DashboardHeader>
+        <Sheet>
+          <div className="flex h-24 pl-10 items-center border-b border-neutral-100">
+            <Input
+              className="basis-[50%] w-3/5 bg-neutral-50 border-neutral-100"
+              placeholder="Search your Knowledge Base"
+            />
+            <div className="basis-[30%]"></div>
+            <div className="basis-[10%] iheading-xxs text-neutral-400">
+              Sorting Options
+            </div>
+            <div className="basis-[14%] flex flex-row">
+              <SheetTrigger>
+                <Button className="bg-neutral-400 text-neutral-600 iheading-xxs">
+                  Create RAG
+                </Button>
+              </SheetTrigger>
+              <CreateContext projectId={project?.id} />
+            </div>
           </div>
+        </Sheet>
+        <div className="flex pl-10 mt-4 mr-12">
+          <Table>
+            <TableHeader className="">
+              <TableRow className="flex w-full">
+                <TableHead className="basis-[65%] iheading-xxs text-neutral-400 font-normal">
+                  RAG Name
+                </TableHead>
+                <TableHead className="basis-[15%] iheading-xxs text-neutral-400 font-normal">
+                  Sources
+                </TableHead>
+                <TableHead className="basis-[15%] iheading-xxs text-neutral-400 font-normal">
+                  Status
+                </TableHead>
+                <TableHead className="basis-[15%] iheading-xxs text-neutral-400 font-normal">
+                  Embedding Model
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {contextsData &&
+                contextsData.map((context, i) => {
+                  return (
+                    <TableRow
+                      onClick={() => navigate(`${context.readable_id}`)}
+                      className={`hover:cursor-pointer flex pl-4 bg-neutral-50 ${i == 0 && "rounded-t-sm"} ${i == contextsData.length - 1 && "rounded-b-sm"}`}
+                    >
+                      <TableCell className="basis-[65%]">
+                        <p className="ibody-l font-normal text-neutral-900">
+                          {context.name}
+                        </p>
+                        <p className="ibody-m font-light text-neutral-400 mt-2">
+                          {context.description}
+                        </p>
+                      </TableCell>
+                      <TableCell className="basis-[15%]">3</TableCell>
+                      <TableCell className="basis-[15%]">
+                        <Badge>Ready</Badge>
+                      </TableCell>
+                      <TableCell className="basis-[15%]">
+                        {context.embedding_model}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
         </div>
-        <CreateContext projectId={TEST_PROJECT_ID} />
-      </Sheet>
+      </DashboardBody>
     </>
   );
 };
