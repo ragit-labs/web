@@ -11,10 +11,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
-import { fetchUser, loginUser } from "@/api/auth";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";
-import Cookies from "js-cookie";
 
 interface LoginInputs {
   email: string;
@@ -22,7 +20,7 @@ interface LoginInputs {
 }
 
 export const LoginScreen = () => {
-  const { user, setUser } = useAuth();
+  const { user, loginAction } = useAuth();
   const navigate = useNavigate();
 
   const {
@@ -37,15 +35,7 @@ export const LoginScreen = () => {
   }, [user, navigate]);
 
   const loginHandler = (data: LoginInputs) => {
-    loginUser(data.email, data.password).then((data) => {
-      const { access_token: accessToken } = data;
-      Cookies.set("accessToken", accessToken, { expires: 59 });
-      if (accessToken) {
-        fetchUser().then((loggedInUser) => {
-          setUser(loggedInUser);
-        });
-      }
-    });
+    loginAction(data.email, data.password).then((response) => {});
   };
 
   return (

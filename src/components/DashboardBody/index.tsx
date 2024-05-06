@@ -2,12 +2,15 @@ import React from "react";
 import { cn } from "@/lib/utils";
 
 const DashboardBody = React.forwardRef<
-  HTMLElement,
-  React.HTMLAttributes<HTMLElement>
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <main
+  <div
     ref={ref}
-    className={cn("flex flex-1 flex-col m-0", className)}
+    className={cn(
+      "absolute left-[16.25rem] right-0 h-screen flex flex-1 flex-col m-0 right-0",
+      className,
+    )}
     {...props}
   />
 ));

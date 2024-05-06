@@ -1,53 +1,58 @@
-import React, { createContext, useContext, useState, useMemo } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { IUser } from "@/types/user";
 import { ReactFCWithChildren } from "../types";
-import { useQuery } from "react-query";
-import { fetchUser } from "@/api/auth";
+import { useNavigate } from "react-router-dom";
+import { useLoginAuthLoginPost } from "@/clients/api/ragitApIComponents";
+import { TUser } from "@/clients/api/ragitApISchemas";
 
 interface AuthContextType {
-  user: IUser | null;
-  isAuthenticated: boolean;
-  setUser: (user: IUser | null) => void;
-  isLoading: boolean;
+  user: TUser | undefined;
+  token: string | undefined;
+  loginAction: (email: string, password: string) => Promise<void>;
+  logoutAction: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<ReactFCWithChildren> = ({ children }) => {
-  const [user, setUser] = useState<IUser | null>(null);
-  const isAuthenticated = !!user;
+  const [token, setToken] = useState<string | undefined>(
+    Cookies.get("accessToken"),
+  );
 
-  const {
-    isLoading,
-    error,
-    data: response,
-  } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => fetchUser(),
-  });
+  const [user, setUser] = useState<TUser | null>(null);
 
-  const token = Cookies.get("accessToken");
+  const navigate = useNavigate();
 
-  useMemo(() => {
-    if (token) {
-      if (!user) {
-        if (!isLoading) {
-          if (response) {
-            setUser(response);
-          } else {
-            console.log("Remove....");
-            Cookies.remove("accessToken");
-          }
-        }
-      }
-    } else {
-      setUser(null);
+  const loginUser = useLoginAuthLoginPost();
+
+  useEffect(() => {}, [token]);
+
+  const loginAction = async (email: string, password: string) => {
+    try {
+      loginUser.mutate(
+        { body: { email, password } },
+        {
+          onSuccess: (tokenResponse) => {
+            console.log("accessToken", tokenResponse.access_token);
+            Cookies.set("accessToken", tokenResponse.access_token);
+            setToken(tokenResponse.access_token);
+            setUser(tokenResponse.user);
+          },
+        },
+      );
+    } catch (error) {
+      console.error("Hola", error);
     }
-  }, [token, response, error, isLoading]);
+  };
+
+  const logoutAction = () => {
+    setToken("");
+    Cookies.remove("accessToken");
+    navigate("/login");
+  };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, setUser, isLoading }}>
+    <AuthContext.Provider value={{ user, token, loginAction, logoutAction }}>
       {children}
     </AuthContext.Provider>
   );
@@ -59,4 +64,9 @@ export const useAuth = () => {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
+};
+
+export const useToken = () => {
+  const context = useContext(AuthContext);
+  return context?.token;
 };

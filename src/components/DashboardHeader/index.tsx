@@ -7,10 +7,7 @@ const DashboardHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn(
-      "flex h-24 pl-10 items-center border-b border-neutral-100",
-      className,
-    )}
+    className={cn("absolute flex h-24 w-full pl-10 items-center", className)}
     {...props}
   />
 ));

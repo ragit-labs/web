@@ -5,7 +5,7 @@ export const initializeAxiosInterceptors = () => {
   axios.interceptors.request.use(
     (config) => {
       const token = Cookies.get("accessToken");
-      if (token) {
+      if (!config.headers["disable_auth"] && token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
       return config;

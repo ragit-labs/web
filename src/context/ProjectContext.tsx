@@ -1,12 +1,12 @@
 import React, { createContext, useContext } from "react";
 import { ReactFCWithChildren } from "../types";
-import { useQuery } from "react-query";
-import { fetchProjectByReadableId } from "@/api/project";
-import { IProject } from "@/types/project";
 import { useParams } from "react-router-dom";
+import { LoadingFullScreen } from "@/components/Loading";
+import { useGetProjectProjectGetProjectIdGet } from "@/clients/api/ragitApIComponents";
+import { TProject } from "@/clients/api/ragitApISchemas";
 
 interface ProjectContextType {
-  project: IProject;
+  project: TProject;
   isLoading: boolean;
   error: any;
 }
@@ -17,31 +17,26 @@ export const ProjectProvider: React.FC<ReactFCWithChildren> = ({
   children,
 }) => {
   const { projectId } = useParams();
-
   const {
     isLoading,
     error,
     data: project,
-  } = useQuery({
-    queryKey: ["project"],
-    queryFn: () => fetchProjectByReadableId(projectId ?? ""),
-    enabled: !!projectId,
-  });
+  } = useGetProjectProjectGetProjectIdGet(
+    { pathParams: { projectId: projectId ?? "" } },
+    { enabled: !!projectId },
+  );
 
   if (!project) {
-    return <div>Loading Project</div>;
+    return <LoadingFullScreen />;
   }
+
+  console.log(project);
 
   return (
     <ProjectContext.Provider
       value={{
         isLoading,
-        project: {
-          id: project.id,
-          name: project.name,
-          description: project.description,
-          readableId: project.readable_id,
-        },
+        project,
         error,
       }}
     >

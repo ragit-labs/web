@@ -11,10 +11,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
-import { fetchUser, signupUser } from "@/api/auth";
 import Cookies from "js-cookie";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";
+import { useSignupAuthSignupPost } from "@/clients/api/ragitApIComponents";
 
 interface SignupInputs {
   email: string;
@@ -30,7 +30,7 @@ export const SignupScreen = () => {
     watch,
     formState: { errors },
   } = useForm<SignupInputs>();
-  const { user, setUser } = useAuth();
+  const { user, loginAction } = useAuth();
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -38,18 +38,28 @@ export const SignupScreen = () => {
   }, [user, navigate]);
 
   const signupHandler = (data: SignupInputs) => {
-    signupUser(data.firstName, data.lastName, data.email, data.password).then(
-      (data) => {
-        const { access_token: accessToken } = data;
-        Cookies.set("accessToken", accessToken, { expires: 59 });
-        if (accessToken) {
-          fetchUser().then((loggedInUser) => {
-            setUser(loggedInUser);
-          });
-        }
+    signUpUser.mutate(
+      {
+        body: {
+          email: data.email,
+          first_name: data.firstName,
+          last_name: data.lastName,
+          password: data.password,
+        },
+      },
+      {
+        onSuccess: (signupData) => {
+          const { access_token: accessToken } = signupData;
+          Cookies.set("accessToken", accessToken, { expires: 59 });
+          if (accessToken) {
+            loginAction(data.email, data.password);
+          }
+        },
       },
     );
   };
+
+  const signUpUser = useSignupAuthSignupPost();
 
   return (
     <Card className="mx-auto max-w-sm">

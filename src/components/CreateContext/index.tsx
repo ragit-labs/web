@@ -1,85 +1,100 @@
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { useToast } from "../ui/use-toast";
-import { createContextForProject } from "@/api/context";
-import { SheetContent } from "../ui/sheet";
+
+import {
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useCreateContextContextCreatePost } from "@/clients/api/ragitApIComponents";
+import { useUser } from "@/context/UserContext";
+import { useState } from "react";
+
+interface ICreateContextForm {
+  contextName: string;
+  contextDescription: string;
+}
 
 const CreateContext = ({ projectId }: { projectId: string }) => {
   const { toast } = useToast();
+  const { user } = useUser();
+
+  const createContextMutation = useCreateContextContextCreatePost();
+  const [createContextMutationLoading, setCreateContextMutationLoading] =
+    useState(false);
 
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm();
-  const onSubmit = (data) => {
-    createContextForProject(projectId, data.contextName)
-      .then((response) => {
-        toast({
-          title: "Context Created Successfully.",
-          description:
-            "You can now start adding sources. Context ID: " + response.id,
-        });
-        console.log(response);
-      })
-      .catch((error) => {
-        toast({
-          title: "Uh, Oh! Context Creation Failed.",
-          description: "Something went wrong",
-        });
-        console.log(error);
+  } = useForm<ICreateContextForm>();
+
+  const onSubmit = (data: ICreateContextForm) => {
+    if (user) {
+      setCreateContextMutationLoading(true);
+      toast({
+        title: "Creating context...",
+        description: "Hold your horses, eh!",
       });
+      createContextMutation.mutate(
+        {
+          body: {
+            project_id: projectId,
+            name: data.contextName,
+            owner_id: user?.id,
+          },
+        },
+        {
+          onSuccess: (response) => {
+            toast({
+              title: "Context Created Successfully",
+            });
+            setCreateContextMutationLoading(false);
+            console.log(response);
+          },
+          onError: (error) => {
+            toast({
+              title: "Unable to create context!",
+              description: error.payload.toString(),
+            });
+            setCreateContextMutationLoading(false);
+          },
+        },
+      );
+    }
   };
-  console.log(watch("contextName"));
 
   return (
-    <SheetContent>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>Create Context</DialogTitle>
+      </DialogHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Card className="w-[350px]">
-          <CardHeader>
-            <CardTitle>Create Context</CardTitle>
-            <CardDescription>
-              Deploy your new context in one-click.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Name</Label>
-                <Input
-                  id="name"
-                  placeholder="Name of your new context"
-                  {...register("contextName", { required: true })}
-                />
-                {errors.contextName && <span>Context name is required</span>}
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Description</Label>
-                <Input
-                  id="name"
-                  placeholder="Description for your new context"
-                />
-              </div>
-            </div>
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button variant="outline">Cancel</Button>
-            <Button>Create</Button>
-          </CardFooter>
-        </Card>
+        <div className="grid w-full items-center gap-4">
+          <div className="flex flex-col space-y-1.5">
+            <Label htmlFor="name">Name</Label>
+            <Input
+              id="name"
+              placeholder="Name of your new context"
+              {...register("contextName", { required: true })}
+            />
+            {errors.contextName && <span>Context name is required</span>}
+          </div>
+          <div className="flex flex-col space-y-1.5">
+            <Label htmlFor="description">Description</Label>
+            <Input
+              id="description"
+              placeholder="Description for your new context"
+              {...register("contextDescription", { required: true })}
+            />
+          </div>
+        </div>
+        <Button disabled={createContextMutationLoading}>Create</Button>
       </form>
-    </SheetContent>
+    </DialogContent>
   );
 };
 

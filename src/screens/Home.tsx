@@ -1,28 +1,25 @@
-import { useQuery } from "react-query";
-import { fetchProjects } from "@/api/project";
 import { useNavigate } from "react-router-dom";
+import { LoadingFullScreen } from "@/components/Loading";
+import { useGetProjectsProjectGetGet } from "@/clients/api/ragitApIComponents";
 
 const HomeScreen = () => {
   const {
-    isLoading,
-    error,
     data: projects,
-  } = useQuery({
-    queryKey: ["projects"],
-    queryFn: () => fetchProjects(),
-  });
+    isLoading: projectsLoading,
+    error: projectsError,
+  } = useGetProjectsProjectGetGet({});
 
   const navigate = useNavigate();
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (projectsLoading) {
+    return <LoadingFullScreen />;
   }
 
-  if (!isLoading && !projects) {
+  if (!projectsLoading && !projects) {
     return <div>No projects found</div>;
   }
 
-  if (!isLoading && projects) {
+  if (!projectsLoading && projects) {
     navigate("/" + projects[0].readable_id);
   }
 };
