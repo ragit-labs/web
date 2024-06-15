@@ -54,7 +54,7 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "#6369fa",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
@@ -105,6 +105,7 @@ module.exports = {
   },
   plugins: [
     require("tailwindcss-animate"),
+    require('tailwind-scrollbar'),
     function({addUtilities}) {
       const newUtilities = {};
       const fontStylesByTypes = {

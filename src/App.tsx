@@ -1,18 +1,19 @@
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
-import ContextScreen from "./screens/context/ContextsScreen";
-import ViewContextScreen from "./screens/context/ViewContextScreen";
-import FileManagementScreen from "./screens/FileManagementScreen";
 import { Toaster } from "./components/ui/toaster";
 import Navigtaion from "./components/Navigation";
-import HomeScreen from "./screens/Home";
 import SignupScreen from "./screens/auth/signup";
 import LoginScreen from "./screens/auth/login";
 import LogoutScreen from "./screens/auth/logout";
 import { ProjectProvider } from "./context/ProjectContext";
 import ProjectScreen from "./screens/Project";
 import { AuthProvider } from "./context/AuthContext";
-import PlaygroundScreen from "./screens/PlaygroundScreen";
+// import PlaygroundScreen from "./screens/PlaygroundScreen";
 import { UserProvider, useUser } from "./context/UserContext";
+// import PlaygroundHistoryScreen from "./screens/PlaygroundScreen/PlaygroundHistoryScreen";
+import SourcesScreen from "./screens/sources/SourcesScreen";
+import DemoScreen from "./screens/demo";
+import DiscordLoginScreem from "./screens/auth/verify";
+import DiscordIntegrationsScreen from "./screens/integrations/discord";
 
 const AuthenticatedRoute = () => {
   const { user, isUserLoading } = useUser();
@@ -32,10 +33,10 @@ const App = () => {
         <AuthProvider>
           <UserProvider>
             <Routes>
+              <Route path="/demo" element={<DemoScreen />} />
               <Route element={<AuthenticatedRoute />}>
-                <Route path="/" element={<HomeScreen />} />
                 <Route
-                  path="/:projectId"
+                  path="/"
                   element={
                     <ProjectProvider>
                       <Navigtaion selectedPage="overview" />
@@ -44,24 +45,24 @@ const App = () => {
                   }
                 />
                 <Route
-                  path="/:projectId/knowledge-base"
+                  path="/knowledge-base"
                   element={
                     <ProjectProvider>
                       <Navigtaion selectedPage="knowledge-base" />
-                      <ContextScreen />
+                      <SourcesScreen />
                     </ProjectProvider>
                   }
                 />
                 <Route
-                  path="/:projectId/files"
+                  path="/integrations/discord"
                   element={
                     <ProjectProvider>
-                      <Navigtaion selectedPage="files" />
-                      <FileManagementScreen />
+                      <Navigtaion selectedPage="knowledge-base" />
+                      <DiscordIntegrationsScreen />
                     </ProjectProvider>
                   }
                 />
-                <Route
+                {/* <Route
                   path="/:projectId/knowledge-base/:contextId/:tabName"
                   element={
                     <ProjectProvider>
@@ -89,6 +90,15 @@ const App = () => {
                   }
                 />
                 <Route
+                  path="/:projectId/playground/history"
+                  element={
+                    <ProjectProvider>
+                      <Navigtaion selectedPage="playground" />
+                      <PlaygroundHistoryScreen />
+                    </ProjectProvider>
+                  }
+                />
+                <Route
                   path="/:projectId/playground/:playgroundId"
                   element={
                     <ProjectProvider>
@@ -96,12 +106,13 @@ const App = () => {
                       <PlaygroundScreen />
                     </ProjectProvider>
                   }
-                />
+                /> */}
               </Route>
 
               <Route path="/signup" element={<SignupScreen />} />
               <Route path="/login" element={<LoginScreen />} />
               <Route path="/logout" element={<LogoutScreen />} />
+              <Route path="/discord/verify" element={<DiscordLoginScreem />} />
             </Routes>
           </UserProvider>
         </AuthProvider>

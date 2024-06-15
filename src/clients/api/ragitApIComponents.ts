@@ -9,47 +9,54 @@ import type * as Fetcher from "./ragitApIFetcher";
 import { ragitApIFetch } from "./ragitApIFetcher";
 import type * as Schemas from "./ragitApISchemas";
 
-export type GetPresignedUrlFilesGetPresignedUrlPostError =
+export type GetPresignedUrlSourceFileGetPresignedUrlPostError =
   Fetcher.ErrorWrapper<{
     status: 422;
     payload: Schemas.HTTPValidationError;
   }>;
 
-export type GetPresignedUrlFilesGetPresignedUrlPostVariables = {
+export type GetPresignedUrlSourceFileGetPresignedUrlPostVariables = {
   body: Schemas.GetPresignedUrlRequest;
 } & RagitApIContext["fetcherOptions"];
 
-export const fetchGetPresignedUrlFilesGetPresignedUrlPost = (
-  variables: GetPresignedUrlFilesGetPresignedUrlPostVariables,
+export const fetchGetPresignedUrlSourceFileGetPresignedUrlPost = (
+  variables: GetPresignedUrlSourceFileGetPresignedUrlPostVariables,
   signal?: AbortSignal,
 ) =>
   ragitApIFetch<
-    void,
-    GetPresignedUrlFilesGetPresignedUrlPostError,
+    Schemas.PresignedUrl,
+    GetPresignedUrlSourceFileGetPresignedUrlPostError,
     Schemas.GetPresignedUrlRequest,
     {},
     {},
     {}
-  >({ url: "/files/get_presigned_url", method: "post", ...variables, signal });
+  >({
+    url: "/source/file/get_presigned_url",
+    method: "post",
+    ...variables,
+    signal,
+  });
 
-export const useGetPresignedUrlFilesGetPresignedUrlPost = (
+export const useGetPresignedUrlSourceFileGetPresignedUrlPost = (
   options?: Omit<
     reactQuery.UseMutationOptions<
-      void,
-      GetPresignedUrlFilesGetPresignedUrlPostError,
-      GetPresignedUrlFilesGetPresignedUrlPostVariables
+      Schemas.PresignedUrl,
+      GetPresignedUrlSourceFileGetPresignedUrlPostError,
+      GetPresignedUrlSourceFileGetPresignedUrlPostVariables
     >,
     "mutationFn"
   >,
 ) => {
   const { fetcherOptions } = useRagitApIContext();
   return reactQuery.useMutation<
-    void,
-    GetPresignedUrlFilesGetPresignedUrlPostError,
-    GetPresignedUrlFilesGetPresignedUrlPostVariables
+    Schemas.PresignedUrl,
+    GetPresignedUrlSourceFileGetPresignedUrlPostError,
+    GetPresignedUrlSourceFileGetPresignedUrlPostVariables
   >({
-    mutationFn: (variables: GetPresignedUrlFilesGetPresignedUrlPostVariables) =>
-      fetchGetPresignedUrlFilesGetPresignedUrlPost({
+    mutationFn: (
+      variables: GetPresignedUrlSourceFileGetPresignedUrlPostVariables,
+    ) =>
+      fetchGetPresignedUrlSourceFileGetPresignedUrlPost({
         ...fetcherOptions,
         ...variables,
       }),
@@ -57,519 +64,54 @@ export const useGetPresignedUrlFilesGetPresignedUrlPost = (
   });
 };
 
-export type CompleteUploadFilesCompleteUploadPostError = Fetcher.ErrorWrapper<{
-  status: 422;
-  payload: Schemas.HTTPValidationError;
-}>;
+export type CompleteUploadSourceFileCompleteUploadPostError =
+  Fetcher.ErrorWrapper<{
+    status: 422;
+    payload: Schemas.HTTPValidationError;
+  }>;
 
-export type CompleteUploadFilesCompleteUploadPostVariables = {
+export type CompleteUploadSourceFileCompleteUploadPostVariables = {
   body: Schemas.MarkUploadStatusRequest;
 } & RagitApIContext["fetcherOptions"];
 
-export const fetchCompleteUploadFilesCompleteUploadPost = (
-  variables: CompleteUploadFilesCompleteUploadPostVariables,
+export const fetchCompleteUploadSourceFileCompleteUploadPost = (
+  variables: CompleteUploadSourceFileCompleteUploadPostVariables,
   signal?: AbortSignal,
 ) =>
   ragitApIFetch<
-    void,
-    CompleteUploadFilesCompleteUploadPostError,
+    Schemas.MarkSuccess,
+    CompleteUploadSourceFileCompleteUploadPostError,
     Schemas.MarkUploadStatusRequest,
     {},
     {},
     {}
-  >({ url: "/files/complete_upload", method: "post", ...variables, signal });
-
-export const useCompleteUploadFilesCompleteUploadPost = (
-  options?: Omit<
-    reactQuery.UseMutationOptions<
-      void,
-      CompleteUploadFilesCompleteUploadPostError,
-      CompleteUploadFilesCompleteUploadPostVariables
-    >,
-    "mutationFn"
-  >,
-) => {
-  const { fetcherOptions } = useRagitApIContext();
-  return reactQuery.useMutation<
-    void,
-    CompleteUploadFilesCompleteUploadPostError,
-    CompleteUploadFilesCompleteUploadPostVariables
   >({
-    mutationFn: (variables: CompleteUploadFilesCompleteUploadPostVariables) =>
-      fetchCompleteUploadFilesCompleteUploadPost({
-        ...fetcherOptions,
-        ...variables,
-      }),
-    ...options,
-  });
-};
-
-export type GetProjectFilesProjectProjectIdFilesGetPathParams = {
-  projectId: string;
-};
-
-export type GetProjectFilesProjectProjectIdFilesGetError =
-  Fetcher.ErrorWrapper<{
-    status: 422;
-    payload: Schemas.HTTPValidationError;
-  }>;
-
-export type GetProjectFilesProjectProjectIdFilesGetResponse = Schemas.TFile[];
-
-export type GetProjectFilesProjectProjectIdFilesGetVariables = {
-  pathParams: GetProjectFilesProjectProjectIdFilesGetPathParams;
-} & RagitApIContext["fetcherOptions"];
-
-export const fetchGetProjectFilesProjectProjectIdFilesGet = (
-  variables: GetProjectFilesProjectProjectIdFilesGetVariables,
-  signal?: AbortSignal,
-) =>
-  ragitApIFetch<
-    GetProjectFilesProjectProjectIdFilesGetResponse,
-    GetProjectFilesProjectProjectIdFilesGetError,
-    undefined,
-    {},
-    {},
-    GetProjectFilesProjectProjectIdFilesGetPathParams
-  >({ url: "/project/{projectId}/files", method: "get", ...variables, signal });
-
-export const useGetProjectFilesProjectProjectIdFilesGet = <
-  TData = GetProjectFilesProjectProjectIdFilesGetResponse,
->(
-  variables: GetProjectFilesProjectProjectIdFilesGetVariables,
-  options?: Omit<
-    reactQuery.UseQueryOptions<
-      GetProjectFilesProjectProjectIdFilesGetResponse,
-      GetProjectFilesProjectProjectIdFilesGetError,
-      TData
-    >,
-    "queryKey" | "queryFn" | "initialData"
-  >,
-) => {
-  const { fetcherOptions, queryOptions, queryKeyFn } =
-    useRagitApIContext(options);
-  return reactQuery.useQuery<
-    GetProjectFilesProjectProjectIdFilesGetResponse,
-    GetProjectFilesProjectProjectIdFilesGetError,
-    TData
-  >({
-    queryKey: queryKeyFn({
-      path: "/project/{projectId}/files",
-      operationId: "getProjectFilesProjectProjectIdFilesGet",
-      variables,
-    }),
-    queryFn: ({ signal }) =>
-      fetchGetProjectFilesProjectProjectIdFilesGet(
-        { ...fetcherOptions, ...variables },
-        signal,
-      ),
-    ...options,
-    ...queryOptions,
-  });
-};
-
-export type GetContextFilesContextContextIdFilesGetPathParams = {
-  contextId: string;
-};
-
-export type GetContextFilesContextContextIdFilesGetError =
-  Fetcher.ErrorWrapper<{
-    status: 422;
-    payload: Schemas.HTTPValidationError;
-  }>;
-
-export type GetContextFilesContextContextIdFilesGetResponse = Schemas.TFile[];
-
-export type GetContextFilesContextContextIdFilesGetVariables = {
-  pathParams: GetContextFilesContextContextIdFilesGetPathParams;
-} & RagitApIContext["fetcherOptions"];
-
-export const fetchGetContextFilesContextContextIdFilesGet = (
-  variables: GetContextFilesContextContextIdFilesGetVariables,
-  signal?: AbortSignal,
-) =>
-  ragitApIFetch<
-    GetContextFilesContextContextIdFilesGetResponse,
-    GetContextFilesContextContextIdFilesGetError,
-    undefined,
-    {},
-    {},
-    GetContextFilesContextContextIdFilesGetPathParams
-  >({ url: "/context/{contextId}/files", method: "get", ...variables, signal });
-
-export const useGetContextFilesContextContextIdFilesGet = <
-  TData = GetContextFilesContextContextIdFilesGetResponse,
->(
-  variables: GetContextFilesContextContextIdFilesGetVariables,
-  options?: Omit<
-    reactQuery.UseQueryOptions<
-      GetContextFilesContextContextIdFilesGetResponse,
-      GetContextFilesContextContextIdFilesGetError,
-      TData
-    >,
-    "queryKey" | "queryFn" | "initialData"
-  >,
-) => {
-  const { fetcherOptions, queryOptions, queryKeyFn } =
-    useRagitApIContext(options);
-  return reactQuery.useQuery<
-    GetContextFilesContextContextIdFilesGetResponse,
-    GetContextFilesContextContextIdFilesGetError,
-    TData
-  >({
-    queryKey: queryKeyFn({
-      path: "/context/{contextId}/files",
-      operationId: "getContextFilesContextContextIdFilesGet",
-      variables,
-    }),
-    queryFn: ({ signal }) =>
-      fetchGetContextFilesContextContextIdFilesGet(
-        { ...fetcherOptions, ...variables },
-        signal,
-      ),
-    ...options,
-    ...queryOptions,
-  });
-};
-
-export type DeleteFileFilesDeletePostError = Fetcher.ErrorWrapper<{
-  status: 422;
-  payload: Schemas.HTTPValidationError;
-}>;
-
-export type DeleteFileFilesDeletePostVariables = {
-  body: Schemas.ApiServiceRoutersFileEndpointsTypesDeleteFileRequest;
-} & RagitApIContext["fetcherOptions"];
-
-export const fetchDeleteFileFilesDeletePost = (
-  variables: DeleteFileFilesDeletePostVariables,
-  signal?: AbortSignal,
-) =>
-  ragitApIFetch<
-    void,
-    DeleteFileFilesDeletePostError,
-    Schemas.ApiServiceRoutersFileEndpointsTypesDeleteFileRequest,
-    {},
-    {},
-    {}
-  >({ url: "/files/delete", method: "post", ...variables, signal });
-
-export const useDeleteFileFilesDeletePost = (
-  options?: Omit<
-    reactQuery.UseMutationOptions<
-      void,
-      DeleteFileFilesDeletePostError,
-      DeleteFileFilesDeletePostVariables
-    >,
-    "mutationFn"
-  >,
-) => {
-  const { fetcherOptions } = useRagitApIContext();
-  return reactQuery.useMutation<
-    void,
-    DeleteFileFilesDeletePostError,
-    DeleteFileFilesDeletePostVariables
-  >({
-    mutationFn: (variables: DeleteFileFilesDeletePostVariables) =>
-      fetchDeleteFileFilesDeletePost({ ...fetcherOptions, ...variables }),
-    ...options,
-  });
-};
-
-export type CreateContextContextCreatePostError = Fetcher.ErrorWrapper<{
-  status: 422;
-  payload: Schemas.HTTPValidationError;
-}>;
-
-export type CreateContextContextCreatePostVariables = {
-  body: Schemas.CreateContextRequest;
-} & RagitApIContext["fetcherOptions"];
-
-export const fetchCreateContextContextCreatePost = (
-  variables: CreateContextContextCreatePostVariables,
-  signal?: AbortSignal,
-) =>
-  ragitApIFetch<
-    void,
-    CreateContextContextCreatePostError,
-    Schemas.CreateContextRequest,
-    {},
-    {},
-    {}
-  >({ url: "/context/create", method: "post", ...variables, signal });
-
-export const useCreateContextContextCreatePost = (
-  options?: Omit<
-    reactQuery.UseMutationOptions<
-      void,
-      CreateContextContextCreatePostError,
-      CreateContextContextCreatePostVariables
-    >,
-    "mutationFn"
-  >,
-) => {
-  const { fetcherOptions } = useRagitApIContext();
-  return reactQuery.useMutation<
-    void,
-    CreateContextContextCreatePostError,
-    CreateContextContextCreatePostVariables
-  >({
-    mutationFn: (variables: CreateContextContextCreatePostVariables) =>
-      fetchCreateContextContextCreatePost({ ...fetcherOptions, ...variables }),
-    ...options,
-  });
-};
-
-export type GetContextByReadableIdProjectProjectIdContextReadableIdGetPathParams =
-  {
-    projectId: string;
-    readableId: number;
-  };
-
-export type GetContextByReadableIdProjectProjectIdContextReadableIdGetError =
-  Fetcher.ErrorWrapper<{
-    status: 422;
-    payload: Schemas.HTTPValidationError;
-  }>;
-
-export type GetContextByReadableIdProjectProjectIdContextReadableIdGetVariables =
-  {
-    pathParams: GetContextByReadableIdProjectProjectIdContextReadableIdGetPathParams;
-  } & RagitApIContext["fetcherOptions"];
-
-export const fetchGetContextByReadableIdProjectProjectIdContextReadableIdGet = (
-  variables: GetContextByReadableIdProjectProjectIdContextReadableIdGetVariables,
-  signal?: AbortSignal,
-) =>
-  ragitApIFetch<
-    Schemas.TContext,
-    GetContextByReadableIdProjectProjectIdContextReadableIdGetError,
-    undefined,
-    {},
-    {},
-    GetContextByReadableIdProjectProjectIdContextReadableIdGetPathParams
-  >({
-    url: "/project/{projectId}/context/{readableId}",
-    method: "get",
-    ...variables,
-    signal,
-  });
-
-export const useGetContextByReadableIdProjectProjectIdContextReadableIdGet = <
-  TData = Schemas.TContext,
->(
-  variables: GetContextByReadableIdProjectProjectIdContextReadableIdGetVariables,
-  options?: Omit<
-    reactQuery.UseQueryOptions<
-      Schemas.TContext,
-      GetContextByReadableIdProjectProjectIdContextReadableIdGetError,
-      TData
-    >,
-    "queryKey" | "queryFn" | "initialData"
-  >,
-) => {
-  const { fetcherOptions, queryOptions, queryKeyFn } =
-    useRagitApIContext(options);
-  return reactQuery.useQuery<
-    Schemas.TContext,
-    GetContextByReadableIdProjectProjectIdContextReadableIdGetError,
-    TData
-  >({
-    queryKey: queryKeyFn({
-      path: "/project/{projectId}/context/{readableId}",
-      operationId: "getContextByReadableIdProjectProjectIdContextReadableIdGet",
-      variables,
-    }),
-    queryFn: ({ signal }) =>
-      fetchGetContextByReadableIdProjectProjectIdContextReadableIdGet(
-        { ...fetcherOptions, ...variables },
-        signal,
-      ),
-    ...options,
-    ...queryOptions,
-  });
-};
-
-export type GetProjectContextsProjectProjectIdContextsGetPathParams = {
-  projectId: string;
-};
-
-export type GetProjectContextsProjectProjectIdContextsGetError =
-  Fetcher.ErrorWrapper<{
-    status: 422;
-    payload: Schemas.HTTPValidationError;
-  }>;
-
-export type GetProjectContextsProjectProjectIdContextsGetResponse =
-  Schemas.TContext[];
-
-export type GetProjectContextsProjectProjectIdContextsGetVariables = {
-  pathParams: GetProjectContextsProjectProjectIdContextsGetPathParams;
-} & RagitApIContext["fetcherOptions"];
-
-export const fetchGetProjectContextsProjectProjectIdContextsGet = (
-  variables: GetProjectContextsProjectProjectIdContextsGetVariables,
-  signal?: AbortSignal,
-) =>
-  ragitApIFetch<
-    GetProjectContextsProjectProjectIdContextsGetResponse,
-    GetProjectContextsProjectProjectIdContextsGetError,
-    undefined,
-    {},
-    {},
-    GetProjectContextsProjectProjectIdContextsGetPathParams
-  >({
-    url: "/project/{projectId}/contexts",
-    method: "get",
-    ...variables,
-    signal,
-  });
-
-export const useGetProjectContextsProjectProjectIdContextsGet = <
-  TData = GetProjectContextsProjectProjectIdContextsGetResponse,
->(
-  variables: GetProjectContextsProjectProjectIdContextsGetVariables,
-  options?: Omit<
-    reactQuery.UseQueryOptions<
-      GetProjectContextsProjectProjectIdContextsGetResponse,
-      GetProjectContextsProjectProjectIdContextsGetError,
-      TData
-    >,
-    "queryKey" | "queryFn" | "initialData"
-  >,
-) => {
-  const { fetcherOptions, queryOptions, queryKeyFn } =
-    useRagitApIContext(options);
-  return reactQuery.useQuery<
-    GetProjectContextsProjectProjectIdContextsGetResponse,
-    GetProjectContextsProjectProjectIdContextsGetError,
-    TData
-  >({
-    queryKey: queryKeyFn({
-      path: "/project/{projectId}/contexts",
-      operationId: "getProjectContextsProjectProjectIdContextsGet",
-      variables,
-    }),
-    queryFn: ({ signal }) =>
-      fetchGetProjectContextsProjectProjectIdContextsGet(
-        { ...fetcherOptions, ...variables },
-        signal,
-      ),
-    ...options,
-    ...queryOptions,
-  });
-};
-
-export type AddFileContextContextIdAddFilePostPathParams = {
-  contextId: string;
-};
-
-export type AddFileContextContextIdAddFilePostError = Fetcher.ErrorWrapper<{
-  status: 422;
-  payload: Schemas.HTTPValidationError;
-}>;
-
-export type AddFileContextContextIdAddFilePostVariables = {
-  body: Schemas.AddFileRequest;
-  pathParams: AddFileContextContextIdAddFilePostPathParams;
-} & RagitApIContext["fetcherOptions"];
-
-export const fetchAddFileContextContextIdAddFilePost = (
-  variables: AddFileContextContextIdAddFilePostVariables,
-  signal?: AbortSignal,
-) =>
-  ragitApIFetch<
-    void,
-    AddFileContextContextIdAddFilePostError,
-    Schemas.AddFileRequest,
-    {},
-    {},
-    AddFileContextContextIdAddFilePostPathParams
-  >({
-    url: "/context/{contextId}/add_file",
+    url: "/source/file/complete_upload",
     method: "post",
     ...variables,
     signal,
   });
 
-export const useAddFileContextContextIdAddFilePost = (
+export const useCompleteUploadSourceFileCompleteUploadPost = (
   options?: Omit<
     reactQuery.UseMutationOptions<
-      void,
-      AddFileContextContextIdAddFilePostError,
-      AddFileContextContextIdAddFilePostVariables
+      Schemas.MarkSuccess,
+      CompleteUploadSourceFileCompleteUploadPostError,
+      CompleteUploadSourceFileCompleteUploadPostVariables
     >,
     "mutationFn"
   >,
 ) => {
   const { fetcherOptions } = useRagitApIContext();
   return reactQuery.useMutation<
-    void,
-    AddFileContextContextIdAddFilePostError,
-    AddFileContextContextIdAddFilePostVariables
-  >({
-    mutationFn: (variables: AddFileContextContextIdAddFilePostVariables) =>
-      fetchAddFileContextContextIdAddFilePost({
-        ...fetcherOptions,
-        ...variables,
-      }),
-    ...options,
-  });
-};
-
-export type RemoveFileContextContextIdRemoveFilePostPathParams = {
-  contextId: string;
-};
-
-export type RemoveFileContextContextIdRemoveFilePostError =
-  Fetcher.ErrorWrapper<{
-    status: 422;
-    payload: Schemas.HTTPValidationError;
-  }>;
-
-export type RemoveFileContextContextIdRemoveFilePostVariables = {
-  body: Schemas.ApiServiceRoutersContextEndpointsTypesDeleteFileRequest;
-  pathParams: RemoveFileContextContextIdRemoveFilePostPathParams;
-} & RagitApIContext["fetcherOptions"];
-
-export const fetchRemoveFileContextContextIdRemoveFilePost = (
-  variables: RemoveFileContextContextIdRemoveFilePostVariables,
-  signal?: AbortSignal,
-) =>
-  ragitApIFetch<
-    void,
-    RemoveFileContextContextIdRemoveFilePostError,
-    Schemas.ApiServiceRoutersContextEndpointsTypesDeleteFileRequest,
-    {},
-    {},
-    RemoveFileContextContextIdRemoveFilePostPathParams
-  >({
-    url: "/context/{contextId}/remove_file",
-    method: "post",
-    ...variables,
-    signal,
-  });
-
-export const useRemoveFileContextContextIdRemoveFilePost = (
-  options?: Omit<
-    reactQuery.UseMutationOptions<
-      void,
-      RemoveFileContextContextIdRemoveFilePostError,
-      RemoveFileContextContextIdRemoveFilePostVariables
-    >,
-    "mutationFn"
-  >,
-) => {
-  const { fetcherOptions } = useRagitApIContext();
-  return reactQuery.useMutation<
-    void,
-    RemoveFileContextContextIdRemoveFilePostError,
-    RemoveFileContextContextIdRemoveFilePostVariables
+    Schemas.MarkSuccess,
+    CompleteUploadSourceFileCompleteUploadPostError,
+    CompleteUploadSourceFileCompleteUploadPostVariables
   >({
     mutationFn: (
-      variables: RemoveFileContextContextIdRemoveFilePostVariables,
+      variables: CompleteUploadSourceFileCompleteUploadPostVariables,
     ) =>
-      fetchRemoveFileContextContextIdRemoveFilePost({
+      fetchCompleteUploadSourceFileCompleteUploadPost({
         ...fetcherOptions,
         ...variables,
       }),
@@ -577,58 +119,49 @@ export const useRemoveFileContextContextIdRemoveFilePost = (
   });
 };
 
-export type GetDocumentsContextContextIdDocumentsGetPathParams = {
-  contextId: string;
+export type GetProjectSourcesProjectProjectIdSourcesGetPathParams = {
+  projectId: string;
 };
 
-export type GetDocumentsContextContextIdDocumentsGetQueryParams = {
-  offset?: string;
-  /**
-   * @default 10
-   */
-  limit?: number;
-};
-
-export type GetDocumentsContextContextIdDocumentsGetError =
+export type GetProjectSourcesProjectProjectIdSourcesGetError =
   Fetcher.ErrorWrapper<{
     status: 422;
     payload: Schemas.HTTPValidationError;
   }>;
 
-export type GetDocumentsContextContextIdDocumentsGetResponse =
-  Schemas.TDocument[];
+export type GetProjectSourcesProjectProjectIdSourcesGetResponse =
+  Schemas.TSource[];
 
-export type GetDocumentsContextContextIdDocumentsGetVariables = {
-  pathParams: GetDocumentsContextContextIdDocumentsGetPathParams;
-  queryParams?: GetDocumentsContextContextIdDocumentsGetQueryParams;
+export type GetProjectSourcesProjectProjectIdSourcesGetVariables = {
+  pathParams: GetProjectSourcesProjectProjectIdSourcesGetPathParams;
 } & RagitApIContext["fetcherOptions"];
 
-export const fetchGetDocumentsContextContextIdDocumentsGet = (
-  variables: GetDocumentsContextContextIdDocumentsGetVariables,
+export const fetchGetProjectSourcesProjectProjectIdSourcesGet = (
+  variables: GetProjectSourcesProjectProjectIdSourcesGetVariables,
   signal?: AbortSignal,
 ) =>
   ragitApIFetch<
-    GetDocumentsContextContextIdDocumentsGetResponse,
-    GetDocumentsContextContextIdDocumentsGetError,
+    GetProjectSourcesProjectProjectIdSourcesGetResponse,
+    GetProjectSourcesProjectProjectIdSourcesGetError,
     undefined,
     {},
-    GetDocumentsContextContextIdDocumentsGetQueryParams,
-    GetDocumentsContextContextIdDocumentsGetPathParams
+    {},
+    GetProjectSourcesProjectProjectIdSourcesGetPathParams
   >({
-    url: "/context/{contextId}/documents",
+    url: "/project/{projectId}/sources",
     method: "get",
     ...variables,
     signal,
   });
 
-export const useGetDocumentsContextContextIdDocumentsGet = <
-  TData = GetDocumentsContextContextIdDocumentsGetResponse,
+export const useGetProjectSourcesProjectProjectIdSourcesGet = <
+  TData = GetProjectSourcesProjectProjectIdSourcesGetResponse,
 >(
-  variables: GetDocumentsContextContextIdDocumentsGetVariables,
+  variables: GetProjectSourcesProjectProjectIdSourcesGetVariables,
   options?: Omit<
     reactQuery.UseQueryOptions<
-      GetDocumentsContextContextIdDocumentsGetResponse,
-      GetDocumentsContextContextIdDocumentsGetError,
+      GetProjectSourcesProjectProjectIdSourcesGetResponse,
+      GetProjectSourcesProjectProjectIdSourcesGetError,
       TData
     >,
     "queryKey" | "queryFn" | "initialData"
@@ -637,17 +170,17 @@ export const useGetDocumentsContextContextIdDocumentsGet = <
   const { fetcherOptions, queryOptions, queryKeyFn } =
     useRagitApIContext(options);
   return reactQuery.useQuery<
-    GetDocumentsContextContextIdDocumentsGetResponse,
-    GetDocumentsContextContextIdDocumentsGetError,
+    GetProjectSourcesProjectProjectIdSourcesGetResponse,
+    GetProjectSourcesProjectProjectIdSourcesGetError,
     TData
   >({
     queryKey: queryKeyFn({
-      path: "/context/{contextId}/documents",
-      operationId: "getDocumentsContextContextIdDocumentsGet",
+      path: "/project/{projectId}/sources",
+      operationId: "getProjectSourcesProjectProjectIdSourcesGet",
       variables,
     }),
     queryFn: ({ signal }) =>
-      fetchGetDocumentsContextContextIdDocumentsGet(
+      fetchGetProjectSourcesProjectProjectIdSourcesGet(
         { ...fetcherOptions, ...variables },
         signal,
       ),
@@ -656,144 +189,75 @@ export const useGetDocumentsContextContextIdDocumentsGet = <
   });
 };
 
-export type DeleteContextContextContextIdDeletePathParams = {
-  contextId: string;
-};
-
-export type DeleteContextContextContextIdDeleteError = Fetcher.ErrorWrapper<{
+export type AddWebpagesSourceWebpageAddPostError = Fetcher.ErrorWrapper<{
   status: 422;
   payload: Schemas.HTTPValidationError;
 }>;
 
-export type DeleteContextContextContextIdDeleteVariables = {
-  pathParams: DeleteContextContextContextIdDeletePathParams;
+export type AddWebpagesSourceWebpageAddPostVariables = {
+  body: Schemas.AddWebPagesRequest;
 } & RagitApIContext["fetcherOptions"];
 
-export const fetchDeleteContextContextContextIdDelete = (
-  variables: DeleteContextContextContextIdDeleteVariables,
+export const fetchAddWebpagesSourceWebpageAddPost = (
+  variables: AddWebpagesSourceWebpageAddPostVariables,
   signal?: AbortSignal,
 ) =>
   ragitApIFetch<
-    void,
-    DeleteContextContextContextIdDeleteError,
-    undefined,
-    {},
-    {},
-    DeleteContextContextContextIdDeletePathParams
-  >({ url: "/context/{contextId}", method: "delete", ...variables, signal });
-
-export const useDeleteContextContextContextIdDelete = (
-  options?: Omit<
-    reactQuery.UseMutationOptions<
-      void,
-      DeleteContextContextContextIdDeleteError,
-      DeleteContextContextContextIdDeleteVariables
-    >,
-    "mutationFn"
-  >,
-) => {
-  const { fetcherOptions } = useRagitApIContext();
-  return reactQuery.useMutation<
-    void,
-    DeleteContextContextContextIdDeleteError,
-    DeleteContextContextContextIdDeleteVariables
-  >({
-    mutationFn: (variables: DeleteContextContextContextIdDeleteVariables) =>
-      fetchDeleteContextContextContextIdDelete({
-        ...fetcherOptions,
-        ...variables,
-      }),
-    ...options,
-  });
-};
-
-export type CreateProjectProjectCreatePostError = Fetcher.ErrorWrapper<{
-  status: 422;
-  payload: Schemas.HTTPValidationError;
-}>;
-
-export type CreateProjectProjectCreatePostVariables = {
-  body: Schemas.CreateProjectRequest;
-} & RagitApIContext["fetcherOptions"];
-
-export const fetchCreateProjectProjectCreatePost = (
-  variables: CreateProjectProjectCreatePostVariables,
-  signal?: AbortSignal,
-) =>
-  ragitApIFetch<
-    void,
-    CreateProjectProjectCreatePostError,
-    Schemas.CreateProjectRequest,
+    Schemas.MarkSuccess,
+    AddWebpagesSourceWebpageAddPostError,
+    Schemas.AddWebPagesRequest,
     {},
     {},
     {}
-  >({ url: "/project/create", method: "post", ...variables, signal });
+  >({ url: "/source/webpage/add", method: "post", ...variables, signal });
 
-export const useCreateProjectProjectCreatePost = (
+export const useAddWebpagesSourceWebpageAddPost = (
   options?: Omit<
     reactQuery.UseMutationOptions<
-      void,
-      CreateProjectProjectCreatePostError,
-      CreateProjectProjectCreatePostVariables
+      Schemas.MarkSuccess,
+      AddWebpagesSourceWebpageAddPostError,
+      AddWebpagesSourceWebpageAddPostVariables
     >,
     "mutationFn"
   >,
 ) => {
   const { fetcherOptions } = useRagitApIContext();
   return reactQuery.useMutation<
-    void,
-    CreateProjectProjectCreatePostError,
-    CreateProjectProjectCreatePostVariables
+    Schemas.MarkSuccess,
+    AddWebpagesSourceWebpageAddPostError,
+    AddWebpagesSourceWebpageAddPostVariables
   >({
-    mutationFn: (variables: CreateProjectProjectCreatePostVariables) =>
-      fetchCreateProjectProjectCreatePost({ ...fetcherOptions, ...variables }),
+    mutationFn: (variables: AddWebpagesSourceWebpageAddPostVariables) =>
+      fetchAddWebpagesSourceWebpageAddPost({ ...fetcherOptions, ...variables }),
     ...options,
   });
 };
 
-export type GetProjectsProjectGetGetQueryParams = {
-  /**
-   * @default 10
-   */
-  limit?: number;
-  /**
-   * @default 0
-   */
-  offset?: number;
-};
+export type GetProjectForUserProjectGetGetError =
+  Fetcher.ErrorWrapper<undefined>;
 
-export type GetProjectsProjectGetGetError = Fetcher.ErrorWrapper<{
-  status: 422;
-  payload: Schemas.HTTPValidationError;
-}>;
+export type GetProjectForUserProjectGetGetVariables =
+  RagitApIContext["fetcherOptions"];
 
-export type GetProjectsProjectGetGetResponse = Schemas.TProject[];
-
-export type GetProjectsProjectGetGetVariables = {
-  queryParams?: GetProjectsProjectGetGetQueryParams;
-} & RagitApIContext["fetcherOptions"];
-
-export const fetchGetProjectsProjectGetGet = (
-  variables: GetProjectsProjectGetGetVariables,
+export const fetchGetProjectForUserProjectGetGet = (
+  variables: GetProjectForUserProjectGetGetVariables,
   signal?: AbortSignal,
 ) =>
   ragitApIFetch<
-    GetProjectsProjectGetGetResponse,
-    GetProjectsProjectGetGetError,
+    Schemas.TProject,
+    GetProjectForUserProjectGetGetError,
     undefined,
     {},
-    GetProjectsProjectGetGetQueryParams,
+    {},
     {}
   >({ url: "/project/get", method: "get", ...variables, signal });
 
-export const useGetProjectsProjectGetGet = <
-  TData = GetProjectsProjectGetGetResponse,
->(
-  variables: GetProjectsProjectGetGetVariables,
+export const useGetProjectForUserProjectGetGet = <TData = Schemas.TProject>(
+  variables: GetProjectForUserProjectGetGetVariables,
   options?: Omit<
     reactQuery.UseQueryOptions<
-      GetProjectsProjectGetGetResponse,
-      GetProjectsProjectGetGetError,
+      Schemas.TProject,
+      GetProjectForUserProjectGetGetError,
       TData
     >,
     "queryKey" | "queryFn" | "initialData"
@@ -802,143 +266,17 @@ export const useGetProjectsProjectGetGet = <
   const { fetcherOptions, queryOptions, queryKeyFn } =
     useRagitApIContext(options);
   return reactQuery.useQuery<
-    GetProjectsProjectGetGetResponse,
-    GetProjectsProjectGetGetError,
+    Schemas.TProject,
+    GetProjectForUserProjectGetGetError,
     TData
   >({
     queryKey: queryKeyFn({
       path: "/project/get",
-      operationId: "getProjectsProjectGetGet",
+      operationId: "getProjectForUserProjectGetGet",
       variables,
     }),
     queryFn: ({ signal }) =>
-      fetchGetProjectsProjectGetGet(
-        { ...fetcherOptions, ...variables },
-        signal,
-      ),
-    ...options,
-    ...queryOptions,
-  });
-};
-
-export type GetProjectProjectGetProjectIdGetPathParams = {
-  projectId: string;
-};
-
-export type GetProjectProjectGetProjectIdGetError = Fetcher.ErrorWrapper<{
-  status: 422;
-  payload: Schemas.HTTPValidationError;
-}>;
-
-export type GetProjectProjectGetProjectIdGetVariables = {
-  pathParams: GetProjectProjectGetProjectIdGetPathParams;
-} & RagitApIContext["fetcherOptions"];
-
-export const fetchGetProjectProjectGetProjectIdGet = (
-  variables: GetProjectProjectGetProjectIdGetVariables,
-  signal?: AbortSignal,
-) =>
-  ragitApIFetch<
-    Schemas.TProject,
-    GetProjectProjectGetProjectIdGetError,
-    undefined,
-    {},
-    {},
-    GetProjectProjectGetProjectIdGetPathParams
-  >({ url: "/project/get/{projectId}", method: "get", ...variables, signal });
-
-export const useGetProjectProjectGetProjectIdGet = <TData = Schemas.TProject>(
-  variables: GetProjectProjectGetProjectIdGetVariables,
-  options?: Omit<
-    reactQuery.UseQueryOptions<
-      Schemas.TProject,
-      GetProjectProjectGetProjectIdGetError,
-      TData
-    >,
-    "queryKey" | "queryFn" | "initialData"
-  >,
-) => {
-  const { fetcherOptions, queryOptions, queryKeyFn } =
-    useRagitApIContext(options);
-  return reactQuery.useQuery<
-    Schemas.TProject,
-    GetProjectProjectGetProjectIdGetError,
-    TData
-  >({
-    queryKey: queryKeyFn({
-      path: "/project/get/{projectId}",
-      operationId: "getProjectProjectGetProjectIdGet",
-      variables,
-    }),
-    queryFn: ({ signal }) =>
-      fetchGetProjectProjectGetProjectIdGet(
-        { ...fetcherOptions, ...variables },
-        signal,
-      ),
-    ...options,
-    ...queryOptions,
-  });
-};
-
-export type GetProjectByUuidProjectGetbyuuidProjectIdGetPathParams = {
-  projectId: string;
-};
-
-export type GetProjectByUuidProjectGetbyuuidProjectIdGetError =
-  Fetcher.ErrorWrapper<{
-    status: 422;
-    payload: Schemas.HTTPValidationError;
-  }>;
-
-export type GetProjectByUuidProjectGetbyuuidProjectIdGetVariables = {
-  pathParams: GetProjectByUuidProjectGetbyuuidProjectIdGetPathParams;
-} & RagitApIContext["fetcherOptions"];
-
-export const fetchGetProjectByUuidProjectGetbyuuidProjectIdGet = (
-  variables: GetProjectByUuidProjectGetbyuuidProjectIdGetVariables,
-  signal?: AbortSignal,
-) =>
-  ragitApIFetch<
-    Schemas.TProject,
-    GetProjectByUuidProjectGetbyuuidProjectIdGetError,
-    undefined,
-    {},
-    {},
-    GetProjectByUuidProjectGetbyuuidProjectIdGetPathParams
-  >({
-    url: "/project/getbyuuid/{projectId}",
-    method: "get",
-    ...variables,
-    signal,
-  });
-
-export const useGetProjectByUuidProjectGetbyuuidProjectIdGet = <
-  TData = Schemas.TProject,
->(
-  variables: GetProjectByUuidProjectGetbyuuidProjectIdGetVariables,
-  options?: Omit<
-    reactQuery.UseQueryOptions<
-      Schemas.TProject,
-      GetProjectByUuidProjectGetbyuuidProjectIdGetError,
-      TData
-    >,
-    "queryKey" | "queryFn" | "initialData"
-  >,
-) => {
-  const { fetcherOptions, queryOptions, queryKeyFn } =
-    useRagitApIContext(options);
-  return reactQuery.useQuery<
-    Schemas.TProject,
-    GetProjectByUuidProjectGetbyuuidProjectIdGetError,
-    TData
-  >({
-    queryKey: queryKeyFn({
-      path: "/project/getbyuuid/{projectId}",
-      operationId: "getProjectByUuidProjectGetbyuuidProjectIdGet",
-      variables,
-    }),
-    queryFn: ({ signal }) =>
-      fetchGetProjectByUuidProjectGetbyuuidProjectIdGet(
+      fetchGetProjectForUserProjectGetGet(
         { ...fetcherOptions, ...variables },
         signal,
       ),
@@ -1043,23 +381,33 @@ export const fetchGetUserAuthGetGet = (
   variables: GetUserAuthGetGetVariables,
   signal?: AbortSignal,
 ) =>
-  ragitApIFetch<Schemas.TUser, GetUserAuthGetGetError, undefined, {}, {}, {}>({
-    url: "/auth/get",
-    method: "get",
-    ...variables,
-    signal,
-  });
+  ragitApIFetch<
+    Schemas.TUser | null,
+    GetUserAuthGetGetError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: "/auth/get", method: "get", ...variables, signal });
 
-export const useGetUserAuthGetGet = <TData = Schemas.TUser>(
+export const useGetUserAuthGetGet = <TData = Schemas.TUser | null>(
   variables: GetUserAuthGetGetVariables,
   options?: Omit<
-    reactQuery.UseQueryOptions<Schemas.TUser, GetUserAuthGetGetError, TData>,
+    reactQuery.UseQueryOptions<
+      Schemas.TUser | null,
+      GetUserAuthGetGetError,
+      TData
+    >,
     "queryKey" | "queryFn" | "initialData"
   >,
 ) => {
   const { fetcherOptions, queryOptions, queryKeyFn } =
     useRagitApIContext(options);
-  return reactQuery.useQuery<Schemas.TUser, GetUserAuthGetGetError, TData>({
+  return reactQuery.useQuery<
+    Schemas.TUser | null,
+    GetUserAuthGetGetError,
+    TData
+  >({
     queryKey: queryKeyFn({
       path: "/auth/get",
       operationId: "getUserAuthGetGet",
@@ -1072,106 +420,137 @@ export const useGetUserAuthGetGet = <TData = Schemas.TUser>(
   });
 };
 
-export type ChatPlaygroundPlaygroundIdChatPostPathParams = {
-  playgroundId: string;
-};
-
-export type ChatPlaygroundPlaygroundIdChatPostError = Fetcher.ErrorWrapper<{
+export type AuthDiscordAuthDiscordPostError = Fetcher.ErrorWrapper<{
   status: 422;
   payload: Schemas.HTTPValidationError;
 }>;
 
-export type ChatPlaygroundPlaygroundIdChatPostVariables = {
-  body: Schemas.ChatRequest;
-  pathParams: ChatPlaygroundPlaygroundIdChatPostPathParams;
+export type AuthDiscordAuthDiscordPostVariables = {
+  body: Schemas.SignupDiscordRequest;
 } & RagitApIContext["fetcherOptions"];
 
-export const fetchChatPlaygroundPlaygroundIdChatPost = (
-  variables: ChatPlaygroundPlaygroundIdChatPostVariables,
+export const fetchAuthDiscordAuthDiscordPost = (
+  variables: AuthDiscordAuthDiscordPostVariables,
   signal?: AbortSignal,
 ) =>
   ragitApIFetch<
-    void,
-    ChatPlaygroundPlaygroundIdChatPostError,
-    Schemas.ChatRequest,
+    Schemas.TAuthResponse,
+    AuthDiscordAuthDiscordPostError,
+    Schemas.SignupDiscordRequest,
     {},
     {},
-    ChatPlaygroundPlaygroundIdChatPostPathParams
-  >({
-    url: "/playground/{playgroundId}/chat",
-    method: "post",
-    ...variables,
-    signal,
-  });
+    {}
+  >({ url: "/auth/discord", method: "post", ...variables, signal });
 
-export const useChatPlaygroundPlaygroundIdChatPost = (
+export const useAuthDiscordAuthDiscordPost = (
   options?: Omit<
     reactQuery.UseMutationOptions<
-      void,
-      ChatPlaygroundPlaygroundIdChatPostError,
-      ChatPlaygroundPlaygroundIdChatPostVariables
+      Schemas.TAuthResponse,
+      AuthDiscordAuthDiscordPostError,
+      AuthDiscordAuthDiscordPostVariables
     >,
     "mutationFn"
   >,
 ) => {
   const { fetcherOptions } = useRagitApIContext();
   return reactQuery.useMutation<
-    void,
-    ChatPlaygroundPlaygroundIdChatPostError,
-    ChatPlaygroundPlaygroundIdChatPostVariables
+    Schemas.TAuthResponse,
+    AuthDiscordAuthDiscordPostError,
+    AuthDiscordAuthDiscordPostVariables
   >({
-    mutationFn: (variables: ChatPlaygroundPlaygroundIdChatPostVariables) =>
-      fetchChatPlaygroundPlaygroundIdChatPost({
-        ...fetcherOptions,
-        ...variables,
-      }),
+    mutationFn: (variables: AuthDiscordAuthDiscordPostVariables) =>
+      fetchAuthDiscordAuthDiscordPost({ ...fetcherOptions, ...variables }),
     ...options,
   });
 };
 
-export type GetChatHistoryPlaygroundPlaygroundIdChatGetPathParams = {
-  playgroundId: string;
+export type ChatRentomojoDemoChat1PostError = Fetcher.ErrorWrapper<{
+  status: 422;
+  payload: Schemas.HTTPValidationError;
+}>;
+
+export type ChatRentomojoDemoChat1PostVariables = {
+  body: Schemas.ChatRequest;
+} & RagitApIContext["fetcherOptions"];
+
+export const fetchChatRentomojoDemoChat1Post = (
+  variables: ChatRentomojoDemoChat1PostVariables,
+  signal?: AbortSignal,
+) =>
+  ragitApIFetch<
+    Schemas.ChatResponse,
+    ChatRentomojoDemoChat1PostError,
+    Schemas.ChatRequest,
+    {},
+    {},
+    {}
+  >({ url: "/demo/chat/1", method: "post", ...variables, signal });
+
+export const useChatRentomojoDemoChat1Post = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.ChatResponse,
+      ChatRentomojoDemoChat1PostError,
+      ChatRentomojoDemoChat1PostVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useRagitApIContext();
+  return reactQuery.useMutation<
+    Schemas.ChatResponse,
+    ChatRentomojoDemoChat1PostError,
+    ChatRentomojoDemoChat1PostVariables
+  >({
+    mutationFn: (variables: ChatRentomojoDemoChat1PostVariables) =>
+      fetchChatRentomojoDemoChat1Post({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
 };
 
-export type GetChatHistoryPlaygroundPlaygroundIdChatGetError =
+export type GetGuildChannelsDiscordGuildsGuildIdChannelsGetPathParams = {
+  guildId: string;
+};
+
+export type GetGuildChannelsDiscordGuildsGuildIdChannelsGetError =
   Fetcher.ErrorWrapper<{
     status: 422;
     payload: Schemas.HTTPValidationError;
   }>;
 
-export type GetChatHistoryPlaygroundPlaygroundIdChatGetResponse =
-  Schemas.ChatResponse[];
+export type GetGuildChannelsDiscordGuildsGuildIdChannelsGetResponse =
+  Schemas.TDiscordChannel[];
 
-export type GetChatHistoryPlaygroundPlaygroundIdChatGetVariables = {
-  pathParams: GetChatHistoryPlaygroundPlaygroundIdChatGetPathParams;
+export type GetGuildChannelsDiscordGuildsGuildIdChannelsGetVariables = {
+  pathParams: GetGuildChannelsDiscordGuildsGuildIdChannelsGetPathParams;
 } & RagitApIContext["fetcherOptions"];
 
-export const fetchGetChatHistoryPlaygroundPlaygroundIdChatGet = (
-  variables: GetChatHistoryPlaygroundPlaygroundIdChatGetVariables,
+export const fetchGetGuildChannelsDiscordGuildsGuildIdChannelsGet = (
+  variables: GetGuildChannelsDiscordGuildsGuildIdChannelsGetVariables,
   signal?: AbortSignal,
 ) =>
   ragitApIFetch<
-    GetChatHistoryPlaygroundPlaygroundIdChatGetResponse,
-    GetChatHistoryPlaygroundPlaygroundIdChatGetError,
+    GetGuildChannelsDiscordGuildsGuildIdChannelsGetResponse,
+    GetGuildChannelsDiscordGuildsGuildIdChannelsGetError,
     undefined,
     {},
     {},
-    GetChatHistoryPlaygroundPlaygroundIdChatGetPathParams
+    GetGuildChannelsDiscordGuildsGuildIdChannelsGetPathParams
   >({
-    url: "/playground/{playgroundId}/chat",
+    url: "/discord/guilds/{guildId}/channels",
     method: "get",
     ...variables,
     signal,
   });
 
-export const useGetChatHistoryPlaygroundPlaygroundIdChatGet = <
-  TData = GetChatHistoryPlaygroundPlaygroundIdChatGetResponse,
+export const useGetGuildChannelsDiscordGuildsGuildIdChannelsGet = <
+  TData = GetGuildChannelsDiscordGuildsGuildIdChannelsGetResponse,
 >(
-  variables: GetChatHistoryPlaygroundPlaygroundIdChatGetVariables,
+  variables: GetGuildChannelsDiscordGuildsGuildIdChannelsGetVariables,
   options?: Omit<
     reactQuery.UseQueryOptions<
-      GetChatHistoryPlaygroundPlaygroundIdChatGetResponse,
-      GetChatHistoryPlaygroundPlaygroundIdChatGetError,
+      GetGuildChannelsDiscordGuildsGuildIdChannelsGetResponse,
+      GetGuildChannelsDiscordGuildsGuildIdChannelsGetError,
       TData
     >,
     "queryKey" | "queryFn" | "initialData"
@@ -1180,17 +559,17 @@ export const useGetChatHistoryPlaygroundPlaygroundIdChatGet = <
   const { fetcherOptions, queryOptions, queryKeyFn } =
     useRagitApIContext(options);
   return reactQuery.useQuery<
-    GetChatHistoryPlaygroundPlaygroundIdChatGetResponse,
-    GetChatHistoryPlaygroundPlaygroundIdChatGetError,
+    GetGuildChannelsDiscordGuildsGuildIdChannelsGetResponse,
+    GetGuildChannelsDiscordGuildsGuildIdChannelsGetError,
     TData
   >({
     queryKey: queryKeyFn({
-      path: "/playground/{playgroundId}/chat",
-      operationId: "getChatHistoryPlaygroundPlaygroundIdChatGet",
+      path: "/discord/guilds/{guildId}/channels",
+      operationId: "getGuildChannelsDiscordGuildsGuildIdChannelsGet",
       variables,
     }),
     queryFn: ({ signal }) =>
-      fetchGetChatHistoryPlaygroundPlaygroundIdChatGet(
+      fetchGetGuildChannelsDiscordGuildsGuildIdChannelsGet(
         { ...fetcherOptions, ...variables },
         signal,
       ),
@@ -1199,40 +578,99 @@ export const useGetChatHistoryPlaygroundPlaygroundIdChatGet = <
   });
 };
 
-export type GetPlaygroundPlaygroundPlaygroundIdGetPathParams = {
-  playgroundId: string;
-};
+export type CreateInteractionDiscordInteractionsPostError =
+  Fetcher.ErrorWrapper<{
+    status: 422;
+    payload: Schemas.HTTPValidationError;
+  }>;
 
-export type GetPlaygroundPlaygroundPlaygroundIdGetError = Fetcher.ErrorWrapper<{
-  status: 422;
-  payload: Schemas.HTTPValidationError;
-}>;
-
-export type GetPlaygroundPlaygroundPlaygroundIdGetVariables = {
-  pathParams: GetPlaygroundPlaygroundPlaygroundIdGetPathParams;
+export type CreateInteractionDiscordInteractionsPostVariables = {
+  body: Schemas.TDiscordCreateInteractionRequest;
 } & RagitApIContext["fetcherOptions"];
 
-export const fetchGetPlaygroundPlaygroundPlaygroundIdGet = (
-  variables: GetPlaygroundPlaygroundPlaygroundIdGetVariables,
+export const fetchCreateInteractionDiscordInteractionsPost = (
+  variables: CreateInteractionDiscordInteractionsPostVariables,
   signal?: AbortSignal,
 ) =>
   ragitApIFetch<
-    Schemas.PlayGroundResponse,
-    GetPlaygroundPlaygroundPlaygroundIdGetError,
+    Schemas.TDiscordCreateInteractionResponse,
+    CreateInteractionDiscordInteractionsPostError,
+    Schemas.TDiscordCreateInteractionRequest,
+    {},
+    {},
+    {}
+  >({ url: "/discord/interactions", method: "post", ...variables, signal });
+
+export const useCreateInteractionDiscordInteractionsPost = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.TDiscordCreateInteractionResponse,
+      CreateInteractionDiscordInteractionsPostError,
+      CreateInteractionDiscordInteractionsPostVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useRagitApIContext();
+  return reactQuery.useMutation<
+    Schemas.TDiscordCreateInteractionResponse,
+    CreateInteractionDiscordInteractionsPostError,
+    CreateInteractionDiscordInteractionsPostVariables
+  >({
+    mutationFn: (
+      variables: CreateInteractionDiscordInteractionsPostVariables,
+    ) =>
+      fetchCreateInteractionDiscordInteractionsPost({
+        ...fetcherOptions,
+        ...variables,
+      }),
+    ...options,
+  });
+};
+
+export type GetInteractionsDiscordInteractionsProjectIdGetPathParams = {
+  projectId: string;
+};
+
+export type GetInteractionsDiscordInteractionsProjectIdGetError =
+  Fetcher.ErrorWrapper<{
+    status: 422;
+    payload: Schemas.HTTPValidationError;
+  }>;
+
+export type GetInteractionsDiscordInteractionsProjectIdGetResponse =
+  Schemas.TDiscordInteraction[];
+
+export type GetInteractionsDiscordInteractionsProjectIdGetVariables = {
+  pathParams: GetInteractionsDiscordInteractionsProjectIdGetPathParams;
+} & RagitApIContext["fetcherOptions"];
+
+export const fetchGetInteractionsDiscordInteractionsProjectIdGet = (
+  variables: GetInteractionsDiscordInteractionsProjectIdGetVariables,
+  signal?: AbortSignal,
+) =>
+  ragitApIFetch<
+    GetInteractionsDiscordInteractionsProjectIdGetResponse,
+    GetInteractionsDiscordInteractionsProjectIdGetError,
     undefined,
     {},
     {},
-    GetPlaygroundPlaygroundPlaygroundIdGetPathParams
-  >({ url: "/playground/{playgroundId}", method: "get", ...variables, signal });
+    GetInteractionsDiscordInteractionsProjectIdGetPathParams
+  >({
+    url: "/discord/interactions/{projectId}",
+    method: "get",
+    ...variables,
+    signal,
+  });
 
-export const useGetPlaygroundPlaygroundPlaygroundIdGet = <
-  TData = Schemas.PlayGroundResponse,
+export const useGetInteractionsDiscordInteractionsProjectIdGet = <
+  TData = GetInteractionsDiscordInteractionsProjectIdGetResponse,
 >(
-  variables: GetPlaygroundPlaygroundPlaygroundIdGetVariables,
+  variables: GetInteractionsDiscordInteractionsProjectIdGetVariables,
   options?: Omit<
     reactQuery.UseQueryOptions<
-      Schemas.PlayGroundResponse,
-      GetPlaygroundPlaygroundPlaygroundIdGetError,
+      GetInteractionsDiscordInteractionsProjectIdGetResponse,
+      GetInteractionsDiscordInteractionsProjectIdGetError,
       TData
     >,
     "queryKey" | "queryFn" | "initialData"
@@ -1241,17 +679,17 @@ export const useGetPlaygroundPlaygroundPlaygroundIdGet = <
   const { fetcherOptions, queryOptions, queryKeyFn } =
     useRagitApIContext(options);
   return reactQuery.useQuery<
-    Schemas.PlayGroundResponse,
-    GetPlaygroundPlaygroundPlaygroundIdGetError,
+    GetInteractionsDiscordInteractionsProjectIdGetResponse,
+    GetInteractionsDiscordInteractionsProjectIdGetError,
     TData
   >({
     queryKey: queryKeyFn({
-      path: "/playground/{playgroundId}",
-      operationId: "getPlaygroundPlaygroundPlaygroundIdGet",
+      path: "/discord/interactions/{projectId}",
+      operationId: "getInteractionsDiscordInteractionsProjectIdGet",
       variables,
     }),
     queryFn: ({ signal }) =>
-      fetchGetPlaygroundPlaygroundPlaygroundIdGet(
+      fetchGetInteractionsDiscordInteractionsProjectIdGet(
         { ...fetcherOptions, ...variables },
         signal,
       ),
@@ -1262,44 +700,14 @@ export const useGetPlaygroundPlaygroundPlaygroundIdGet = <
 
 export type QueryOperation =
   | {
-      path: "/project/{projectId}/files";
-      operationId: "getProjectFilesProjectProjectIdFilesGet";
-      variables: GetProjectFilesProjectProjectIdFilesGetVariables;
-    }
-  | {
-      path: "/context/{contextId}/files";
-      operationId: "getContextFilesContextContextIdFilesGet";
-      variables: GetContextFilesContextContextIdFilesGetVariables;
-    }
-  | {
-      path: "/project/{projectId}/context/{readableId}";
-      operationId: "getContextByReadableIdProjectProjectIdContextReadableIdGet";
-      variables: GetContextByReadableIdProjectProjectIdContextReadableIdGetVariables;
-    }
-  | {
-      path: "/project/{projectId}/contexts";
-      operationId: "getProjectContextsProjectProjectIdContextsGet";
-      variables: GetProjectContextsProjectProjectIdContextsGetVariables;
-    }
-  | {
-      path: "/context/{contextId}/documents";
-      operationId: "getDocumentsContextContextIdDocumentsGet";
-      variables: GetDocumentsContextContextIdDocumentsGetVariables;
+      path: "/project/{projectId}/sources";
+      operationId: "getProjectSourcesProjectProjectIdSourcesGet";
+      variables: GetProjectSourcesProjectProjectIdSourcesGetVariables;
     }
   | {
       path: "/project/get";
-      operationId: "getProjectsProjectGetGet";
-      variables: GetProjectsProjectGetGetVariables;
-    }
-  | {
-      path: "/project/get/{projectId}";
-      operationId: "getProjectProjectGetProjectIdGet";
-      variables: GetProjectProjectGetProjectIdGetVariables;
-    }
-  | {
-      path: "/project/getbyuuid/{projectId}";
-      operationId: "getProjectByUuidProjectGetbyuuidProjectIdGet";
-      variables: GetProjectByUuidProjectGetbyuuidProjectIdGetVariables;
+      operationId: "getProjectForUserProjectGetGet";
+      variables: GetProjectForUserProjectGetGetVariables;
     }
   | {
       path: "/auth/get";
@@ -1307,12 +715,12 @@ export type QueryOperation =
       variables: GetUserAuthGetGetVariables;
     }
   | {
-      path: "/playground/{playgroundId}/chat";
-      operationId: "getChatHistoryPlaygroundPlaygroundIdChatGet";
-      variables: GetChatHistoryPlaygroundPlaygroundIdChatGetVariables;
+      path: "/discord/guilds/{guildId}/channels";
+      operationId: "getGuildChannelsDiscordGuildsGuildIdChannelsGet";
+      variables: GetGuildChannelsDiscordGuildsGuildIdChannelsGetVariables;
     }
   | {
-      path: "/playground/{playgroundId}";
-      operationId: "getPlaygroundPlaygroundPlaygroundIdGet";
-      variables: GetPlaygroundPlaygroundPlaygroundIdGetVariables;
+      path: "/discord/interactions/{projectId}";
+      operationId: "getInteractionsDiscordInteractionsProjectIdGet";
+      variables: GetInteractionsDiscordInteractionsProjectIdGetVariables;
     };

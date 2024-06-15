@@ -1,14 +1,16 @@
 import React, { createContext, useContext } from "react";
 import { ReactFCWithChildren } from "../types";
-import { useParams } from "react-router-dom";
 import { LoadingFullScreen } from "@/components/Loading";
-import { useGetProjectProjectGetProjectIdGet } from "@/clients/api/ragitApIComponents";
 import { TProject } from "@/clients/api/ragitApISchemas";
+import {
+  GetProjectForUserProjectGetGetError,
+  useGetProjectForUserProjectGetGet,
+} from "@/clients/api/ragitApIComponents";
 
 interface ProjectContextType {
   project: TProject;
   isLoading: boolean;
-  error: any;
+  error: GetProjectForUserProjectGetGetError | null;
 }
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
@@ -16,15 +18,11 @@ const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 export const ProjectProvider: React.FC<ReactFCWithChildren> = ({
   children,
 }) => {
-  const { projectId } = useParams();
   const {
     isLoading,
     error,
     data: project,
-  } = useGetProjectProjectGetProjectIdGet(
-    { pathParams: { projectId: projectId ?? "" } },
-    { enabled: !!projectId },
-  );
+  } = useGetProjectForUserProjectGetGet({});
 
   if (!project) {
     return <LoadingFullScreen />;

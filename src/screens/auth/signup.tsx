@@ -15,6 +15,7 @@ import Cookies from "js-cookie";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";
 import { useSignupAuthSignupPost } from "@/clients/api/ragitApIComponents";
+import { useUser } from "@/context/UserContext";
 
 interface SignupInputs {
   email: string;
@@ -30,7 +31,10 @@ export const SignupScreen = () => {
     watch,
     formState: { errors },
   } = useForm<SignupInputs>();
-  const { user, loginAction } = useAuth();
+  const { loginAction } = useAuth();
+  const { user } = useUser();
+
+  console.log(watch("email"));
 
   const navigate = useNavigate();
   useEffect(() => {

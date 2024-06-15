@@ -4,9 +4,15 @@ import { Input } from "@/components/ui/input";
 import { useRef } from "react";
 import { UploadIcon } from "lucide-react";
 import { SUPPORTED_FILE_TYPES } from "@/constants";
+import {
+  useCompleteUploadSourceFileCompleteUploadPost,
+  useGetPresignedUrlSourceFileGetPresignedUrlPost,
+} from "@/clients/api/ragitApIComponents";
+import { useQueryClient } from "@tanstack/react-query";
 
 const FileUploader = ({ projectId }: { projectId: string }) => {
   const inputFileRef = useRef<HTMLInputElement>(null);
+  const queryClient = useQueryClient();
 
   const loadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files === null) return;
@@ -18,6 +24,10 @@ const FileUploader = ({ projectId }: { projectId: string }) => {
     });
     startUpload(file);
   };
+
+  const presignedUrlMutation =
+    useGetPresignedUrlSourceFileGetPresignedUrlPost();
+  const markUploadMutation = useCompleteUploadSourceFileCompleteUploadPost();
 
   const startUpload = (uploadFile: File) => {
     if (uploadFile === null) return;
@@ -35,38 +45,51 @@ const FileUploader = ({ projectId }: { projectId: string }) => {
       });
       return;
     }
-    axios
-      .post("http://localhost:8000/files/get_presigned_url", {
-        key: uploadFile.name,
-        expiration: 60,
-        project_id: projectId,
-        file_type: uploadFile.type,
-        file_size: uploadFile.size,
-      })
-      .then((response) => {
-        toast({
-          title: "Uploading File",
-          description: uploadFile.name,
-        });
-        console.log(response);
-        const uploadUrl = response.data.url;
-        axios
-          .put(uploadUrl, uploadFile, { headers: { disable_auth: true } })
-          .then((uploadResponse) => {
-            console.log(uploadResponse);
-            axios
-              .post("http://localhost:8000/files/complete_upload", {
-                file_id: response.data.file_id,
-              })
-              .then((successResponse) => {
-                console.log(successResponse);
-                toast({
-                  title: "File Uploaded Successfully",
-                  description: uploadFile.name,
-                });
-              });
+    presignedUrlMutation.mutate(
+      {
+        body: {
+          key: uploadFile.name,
+          expiration: 60,
+          project_id: projectId,
+          file_type: uploadFile.type,
+          file_size: uploadFile.size,
+        },
+      },
+      {
+        onSuccess: (response) => {
+          toast({
+            title: "Uploading File",
+            description: uploadFile.name,
           });
-      });
+          const uploadUrl = response.url;
+          axios
+            .put(uploadUrl, uploadFile, { headers: { disable_auth: true } })
+            .then((uploadResponse) => {
+              markUploadMutation.mutate(
+                { body: { file_id: response.file_id } },
+                {
+                  onSuccess: (successResponse) => {
+                    toast({
+                      title: "File Uploaded Successfully",
+                      description: uploadFile.name,
+                    });
+                    console.log(successResponse);
+                    queryClient.invalidateQueries({
+                      predicate: (query) => {
+                        return (
+                          query.queryHash ===
+                          "useGetProjectFilesProjectProjectIdFilesGet"
+                        );
+                      },
+                    });
+                  },
+                },
+              );
+              console.log(uploadResponse);
+            });
+        },
+      },
+    );
   };
 
   const handleDrop = (event: React.DragEvent) => {

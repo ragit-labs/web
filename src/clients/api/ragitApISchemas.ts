@@ -3,160 +3,24 @@
  *
  * @version 0.1.0
  */
-export type AddFileRequest = {
-  /**
-   * ID of the file to add to the context
-   */
-  file_id: string;
+export type AddWebPagesRequest = {
+  project_id: string;
+  urls: string[];
+};
+
+export type ChatHistory = {
+  role: string;
+  message: string;
 };
 
 export type ChatRequest = {
-  /**
-   * The query string to search for
-   *
-   * @minLength 2
-   */
   query: string;
-  /**
-   * The context ID to search in
-   */
-  context_id?: string | null;
+  history?: ChatHistory[];
 };
 
 export type ChatResponse = {
-  /**
-   * The chat ID
-   */
-  id: string;
-  /**
-   * The playground ID
-   */
-  playground_id: string;
-  /**
-   * The user ID
-   */
-  user_id: string;
-  /**
-   * The system prompt
-   */
-  system_prompt: string;
-  /**
-   * The user prompt
-   */
-  user_prompt: string;
-  /**
-   * The model response
-   */
-  model_response: string;
-  /**
-   * The model
-   */
-  model: string;
-  /**
-   * The model parameters
-   */
-  model_params: Record<string, any>;
-  /**
-   * The documents
-   */
-  documents: string[];
-  /**
-   * The creation date and time
-   */
-  created_at: string;
+  messages: string[];
 };
-
-export type CreateContextRequest = {
-  /**
-   * Name of the context
-   */
-  name: string;
-  /**
-   * Description of the context
-   */
-  description?: string;
-  /**
-   * ID of the project to which the context belongs
-   */
-  project_id: string;
-  /**
-   * ID of the owner of the context
-   */
-  owner_id: string;
-  /**
-   * Search mode of the context
-   *
-   * @default SEARCH_WITH_CITATIONS
-   */
-  search_mode?: DocumentSearchMode;
-  /**
-   * Retrieval length of the context
-   *
-   * @default 1024
-   */
-  retrieval_length?: number;
-  /**
-   * Number of documents to retrieve
-   *
-   * @default 10
-   */
-  docs_to_retrieve?: number;
-  /**
-   * Maximum document length
-   *
-   * @default 256
-   */
-  max_doc_length?: number;
-  /**
-   * Document overlap length
-   *
-   * @default 64
-   */
-  doc_overlap_length?: number;
-  /**
-   * Embedding model of the context
-   *
-   * @default BAAI/bge-base-en
-   */
-  embedding_model?: EmbeddingModel;
-  /**
-   * Embedding dimension of the context
-   *
-   * @default 768
-   */
-  embedding_dimension?: number;
-  /**
-   * Distance metric of the context
-   *
-   * @default COSINE
-   */
-  distance_metric?: DocumentEmbeddingDistanceMetric;
-  /**
-   * Extra metadata for the context
-   */
-  extra_metadata?: Record<string, any> | null;
-};
-
-export type CreateProjectRequest = {
-  /**
-   * Name of the project
-   */
-  name: string;
-  /**
-   * Description of the project
-   */
-  description?: string | null;
-  /**
-   * ID of the owner of the project
-   */
-  owner_id: string;
-};
-
-export type DocumentEmbeddingDistanceMetric = "COSINE" | "EUCLIDEAN" | "DOT";
-
-export type DocumentSearchMode = "SEARCH" | "SEARCH_WITH_CITATIONS" | "HYDE";
-
-export type EmbeddingModel = "BAAI/bge-base-en";
 
 export type GetPresignedUrlRequest = {
   key: string;
@@ -193,39 +57,36 @@ export type LoginRequest = {
   password: string;
 };
 
+export type MarkSuccess = {
+  success: boolean;
+};
+
 export type MarkUploadStatusRequest = {
   file_id: string;
 };
 
-export type PlayGroundResponse = {
+export type PresignedUrl = {
+  url: string;
+  file_id: string;
+};
+
+export type SignupDiscordRequest = {
   /**
-   * The playground ID
+   * Discord Auth Code
    */
-  id: string;
+  code: string;
   /**
-   * The name of the playground
+   * Guild ID
    */
-  name: string;
+  guild_id: string;
   /**
-   * The description of the playground
+   * Permissions
    */
-  description: string;
+  permissions: string;
   /**
-   * The readable ID of the playground
+   * Redirect URI
    */
-  readable_id: number;
-  /**
-   * The project ID of the playground
-   */
-  project_id: string;
-  /**
-   * The context ID of the playground
-   */
-  context_id: string;
-  /**
-   * The owner ID of the playground
-   */
-  owner_id: string;
+  redirect_uri: string;
 };
 
 export type SignupRequest = {
@@ -260,125 +121,36 @@ export type TAuthResponse = {
    * Expiry
    */
   expiry: number;
-  /**
-   * User
-   */
-  user: TUser;
 };
 
-export type TContext = {
-  /**
-   * Context's ID
-   */
+export type TDiscordChannel = {
   id: string;
-  /**
-   * Context's Name
-   */
+  guild_id: string;
   name: string;
-  /**
-   * Context's Description
-   */
-  description: string;
-  /**
-   * Context's Readable ID
-   */
-  readable_id: number;
-  /**
-   * Context's Project ID
-   */
-  project_id: string;
-  /**
-   * Context's Owner ID
-   */
-  owner_id: string;
-  /**
-   * Context's Search Mode
-   */
-  search_mode: string;
-  /**
-   * Context's Retrieval Length
-   */
-  retrieval_length: number;
-  /**
-   * Context's Docs To Retrieve
-   */
-  docs_to_retrieve: number;
-  /**
-   * Context's Max Doc Length
-   */
-  max_doc_length: number;
-  /**
-   * Context's Doc Overlap Length
-   */
-  doc_overlap_length: number;
-  /**
-   * Context's Embedding Model
-   */
-  embedding_model: string;
-  /**
-   * Context's Embedding Dimension
-   */
-  embedding_dimension: number;
-  /**
-   * Context's Distance Metric
-   */
-  distance_metric: string;
-  /**
-   * Context's Semantic Search
-   */
-  semantic_search: boolean;
-  /**
-   * Context's Extra Metadata
-   */
-  extra_metadata: Record<string, any>;
-  /**
-   * Context's Last Refreshed At
-   */
-  last_refreshed_at: string;
-  /**
-   * Context's Created At
-   */
-  created_at: string;
 };
 
-export type TDocument = {
-  /**
-   * Document's ID
-   */
-  id: string;
-  /**
-   * Document's Context ID
-   */
-  context_id: string;
-  /**
-   * Document's File ID
-   */
-  file_id: string;
-  /**
-   * Document's Document
-   */
-  document: string;
-  /**
-   * Document's File Name
-   */
-  file_name: string;
-  /**
-   * Document's File Type
-   */
-  file_type: string;
+export type TDiscordCreateInteractionRequest = {
+  project_id: string;
+  guild_id: string;
+  channel_id: string;
+  title: string;
+  content: string;
+  button: string;
+  color: string;
 };
 
-export type TFile = {
+export type TDiscordCreateInteractionResponse = {
+  message_id: string;
+};
+
+export type TDiscordInteraction = {
   id: string;
-  name: string;
-  status: string;
-  description: string;
   project_id: string;
-  owner_id: string;
-  created_at: string;
-  file_size: number;
-  file_type: string;
-  extra_metadata: Record<string, any>;
+  guild_id: string;
+  channel_id: string;
+  message_id: string;
+  message_information: Record<string, any>;
+  updated_at: string;
 };
 
 export type TProject = {
@@ -386,10 +158,6 @@ export type TProject = {
    * Project's ID
    */
   id: string;
-  /**
-   * Project's Readable ID
-   */
-  readable_id: string;
   /**
    * Project's Name
    */
@@ -401,7 +169,19 @@ export type TProject = {
   /**
    * Project's Description
    */
-  description: string;
+  description: string | null;
+};
+
+export type TSource = {
+  id: string;
+  project_id: string;
+  name: string;
+  status: string;
+  source_type: string;
+  url?: string | null;
+  created_at: string;
+  extra_metadata?: Record<string, any> | null;
+  user_id: string;
 };
 
 export type TUser = {
@@ -412,19 +192,27 @@ export type TUser = {
   /**
    * User's Email
    */
-  email: string;
+  email?: string | null;
   /**
    * User's First Name
    */
-  first_name: string;
+  first_name?: string | null;
   /**
    * User's Last Name
    */
-  last_name: string;
+  last_name?: string | null;
+  /**
+   * User's Discord ID
+   */
+  discord_id?: string | null;
+  /**
+   * User's Discord Username
+   */
+  discord_username?: string | null;
   /**
    * User's Signin Provider
    */
-  signin_provider: string;
+  signin_provider?: string | null;
   /**
    * User's Created At
    */
@@ -435,15 +223,4 @@ export type ValidationError = {
   loc: (string | number)[];
   msg: string;
   type: string;
-};
-
-export type ApiServiceRoutersContextEndpointsTypesDeleteFileRequest = {
-  /**
-   * ID of the file to add to the context
-   */
-  file_id: string;
-};
-
-export type ApiServiceRoutersFileEndpointsTypesDeleteFileRequest = {
-  file_id: string;
 };

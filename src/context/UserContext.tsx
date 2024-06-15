@@ -5,7 +5,7 @@ import { TUser } from "@/clients/api/ragitApISchemas";
 import { useAuth } from "./AuthContext";
 
 interface UserContextType {
-  user: TUser | undefined;
+  user: TUser | null | undefined;
   isUserLoading: boolean;
 }
 
@@ -22,6 +22,10 @@ export const UserProvider: React.FC<ReactFCWithChildren> = ({ children }) => {
 
   if (isUserLoading) {
     return <div>Loading...</div>;
+  }
+
+  if (userError) {
+    return <div>Error while getting user...</div>;
   }
 
   return (

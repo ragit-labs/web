@@ -1,6 +1,7 @@
 import { RagitApIContext } from "./ragitApIContext";
 
-const baseUrl = "http://localhost:8000"; // TODO add your baseUrl
+// const baseUrl = "https://api.ragit.io"; // TODO add your baseUrl
+const baseUrl = "http://127.0.0.1:8000"; // TODO add your baseUrl
 
 export type ErrorWrapper<TError> =
   | TError

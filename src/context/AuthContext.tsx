@@ -2,28 +2,37 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { ReactFCWithChildren } from "../types";
 import { useNavigate } from "react-router-dom";
-import { useLoginAuthLoginPost } from "@/clients/api/ragitApIComponents";
-import { TUser } from "@/clients/api/ragitApISchemas";
+import {
+  useAuthDiscordAuthDiscordPost,
+  useLoginAuthLoginPost,
+} from "@/clients/api/ragitApIComponents";
+import { useToast } from "@/components/ui/use-toast";
 
 interface AuthContextType {
-  user: TUser | undefined;
   token: string | undefined;
   loginAction: (email: string, password: string) => Promise<void>;
   logoutAction: () => void;
+  discordLoginAction: (
+    code: string,
+    permissions: string,
+    guild_id: string,
+    redirect_uri: string,
+  ) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<ReactFCWithChildren> = ({ children }) => {
+  const { toast } = useToast();
   const [token, setToken] = useState<string | undefined>(
     Cookies.get("accessToken"),
   );
 
-  const [user, setUser] = useState<TUser | null>(null);
-
   const navigate = useNavigate();
 
   const loginUser = useLoginAuthLoginPost();
+
+  const discordLogin = useAuthDiscordAuthDiscordPost();
 
   useEffect(() => {}, [token]);
 
@@ -33,15 +42,57 @@ export const AuthProvider: React.FC<ReactFCWithChildren> = ({ children }) => {
         { body: { email, password } },
         {
           onSuccess: (tokenResponse) => {
-            console.log("accessToken", tokenResponse.access_token);
             Cookies.set("accessToken", tokenResponse.access_token);
             setToken(tokenResponse.access_token);
-            setUser(tokenResponse.user);
+          },
+          onError: (error) => {
+            toast({
+              title: "Unable to login. Please check email or password.",
+            });
+            console.log(error);
           },
         },
       );
     } catch (error) {
-      console.error("Hola", error);
+      toast({
+        title: "Unable to login. Please check email or password.",
+      });
+    }
+  };
+
+  const discordLoginAction = async (
+    code: string,
+    permissions: string,
+    guild_id: string,
+    redirect_uri: string,
+  ) => {
+    try {
+      discordLogin.mutate(
+        {
+          body: {
+            code,
+            permissions,
+            guild_id,
+            redirect_uri: redirect_uri,
+          },
+        },
+        {
+          onSuccess: (response) => {
+            Cookies.set("accessToken", response.access_token);
+            setToken(response.access_token);
+          },
+          onError: (error) => {
+            toast({
+              title: "Unable to login.",
+            });
+            console.log(error);
+          },
+        },
+      );
+    } catch (error) {
+      toast({
+        title: "Unable to login.",
+      });
     }
   };
 
@@ -52,7 +103,9 @@ export const AuthProvider: React.FC<ReactFCWithChildren> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loginAction, logoutAction }}>
+    <AuthContext.Provider
+      value={{ token, loginAction, logoutAction, discordLoginAction }}
+    >
       {children}
     </AuthContext.Provider>
   );
